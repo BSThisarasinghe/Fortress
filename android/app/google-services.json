@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "522480232676",
+    "project_id": "fortress-ce6c6",
+    "storage_bucket": "fortress-ce6c6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522480232676:android:a963494e7495e4ad76e4f1",
+        "android_client_info": {
+          "package_name": "com.fortress"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPNeTCVrd8eUTpTFi3QTiUNMMMq44i0sg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
