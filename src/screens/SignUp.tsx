@@ -1,20 +1,102 @@
 import React from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import auth from "@react-native-firebase/auth";
+import {CustomButton} from '../components';
+import {useNavigation} from "@react-navigation/native";
+
 
 export default function SignUp() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
-      <TextInput style={styles.input} placeholder="Name" />
-      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" />
-      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-      <Button title="Register" onPress={() => {}} color="#6C63FF" />
-    </View>
-  );
+    const [name, setName] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [confirmPassword, setConfirmPassword] = React.useState('');
+    const navigation = useNavigation<any>();
+
+    const signUp = async () => {
+        if (password !== confirmPassword) {
+            console.error('Passwords do not match');
+            return;
+        }
+
+        try {
+            const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+            await userCredential.user.updateProfile({ displayName: name });
+            console.log('User signed up:', userCredential.user);
+        } catch (error) {
+            console.error('Error signing up:', error);
+        }
+    };
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Sign Up</Text>
+            <TextInput
+                style={styles.input}
+                value={name}
+                onChangeText={setName}
+                placeholder="Full Name"
+                placeholderTextColor="#888"
+            />
+            <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                placeholder="Email"
+                keyboardType="email-address"
+                placeholderTextColor="#888"
+            />
+            <TextInput
+                style={styles.input}
+                value={password}
+                onChangeText={setPassword}
+                placeholder="Password"
+                secureTextEntry
+                placeholderTextColor="#888"
+            />
+            <TextInput
+                style={styles.input}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                placeholder="Confirm Password"
+                secureTextEntry
+                placeholderTextColor="#888"
+            />
+            <CustomButton onPress={signUp} btnText="Sign Up" />
+            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+                <Text style={styles.signupText}>Already have an account? Sign In</Text>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20 },
-  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20 },
-  input: { borderBottomWidth: 1, marginBottom: 15, padding: 10 },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#121212',
+    },
+    title: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginBottom: 20,
+    },
+    input: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#1e1e1e',
+        borderRadius: 8,
+        paddingHorizontal: 15,
+        color: '#fff',
+        marginBottom: 15,
+        borderWidth: 1,
+        borderColor: '#333',
+    },
+    signupText: {
+        marginTop: 15,
+        color: '#007bff',
+        fontSize: 14,
+    },
 });
