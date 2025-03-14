@@ -3,6 +3,7 @@ import {View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native'
 import auth from "@react-native-firebase/auth";
 import {CustomButton} from '../components';
 import {useNavigation} from "@react-navigation/native";
+import LinearGradient from 'react-native-linear-gradient';
 
 
 export default function SignUp() {
@@ -28,7 +29,11 @@ export default function SignUp() {
     };
 
     return (
-        <View style={styles.container}>
+        <LinearGradient
+            colors={['#000', '#151c36', '#000']}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            style={styles.container}>
             <Text style={styles.title}>Sign Up</Text>
             <TextInput
                 style={styles.input}
@@ -65,7 +70,7 @@ export default function SignUp() {
             <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
                 <Text style={styles.signupText}>Already have an account? Sign In</Text>
             </TouchableOpacity>
-        </View>
+        </LinearGradient>
     );
 }
 

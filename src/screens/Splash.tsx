@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React, {useEffect} from 'react';
+import {View, StyleSheet, Dimensions} from 'react-native';
 import LottieView from 'lottie-react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import CustomText from '../components/CustomerText';
-import { useNavigation } from '@react-navigation/native';
-import auth from "@react-native-firebase/auth";
+import {useNavigation} from '@react-navigation/native';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 export default function Splash() {
   const navigation = useNavigation<any>();
@@ -13,20 +13,30 @@ export default function Splash() {
   useEffect(() => {
     setTimeout(() => {
       navigation.navigate("SignIn");
-    }, 2000); // 2-second delay
+    }, 4000);
   }, []);
 
   return (
-    <View style={styles.container}>
-      <LottieView
-        source={require('../assets/animation/splash-animation.json')}
-        autoPlay
-        loop
-        style={styles.animation}
-      />
-      <CustomText variant="bold" style={styles.title}>HomeForPaws</CustomText>
-      <CustomText variant="extraLight" style={styles.footerText}>Designed by Symatics</CustomText>
-    </View>
+    <LinearGradient
+      colors={['#000', '#151c36', '#000']}
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 0}}
+      style={styles.container}>
+      <View style={styles.animationContainer}>
+        <LottieView
+          source={require('../assets/animation/splash-animation.json')}
+          autoPlay
+          loop
+          style={styles.animation}
+        />
+      </View>
+      <CustomText variant="bold" style={styles.title}>
+        Fortress
+      </CustomText>
+      <CustomText variant="extraLight" style={styles.footerText}>
+        Designed by Symmatics
+      </CustomText>
+    </LinearGradient>
   );
 }
 
@@ -35,20 +45,29 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    height: '100%',
+  },
+  animationContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 200,
+    width: 200,
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   animation: {
-    width: width * 0.4,
+    width: width * 0.8,
     height: height * 0.2,
   },
   title: {
     fontSize: 24,
-    color: '#333',
+    color: '#fff',
   },
   footerText: {
     position: 'absolute',
     bottom: 20,
     fontSize: 12,
     color: '#999999',
-  }
+  },
 });
