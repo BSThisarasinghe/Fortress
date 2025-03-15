@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {View, StyleSheet, Dimensions} from 'react-native';
 import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import CustomText from '../components/CustomerText';
+import CustomText from '../components/CustomText.tsx';
 import {useNavigation} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
@@ -22,15 +22,17 @@ export default function Splash() {
       start={{x: 0, y: 0}}
       end={{x: 1, y: 0}}
       style={styles.container}>
-      <View style={styles.animationContainer}>
+      <LinearGradient
+          colors={['#2b4d5d', '#3a79a6', '#7af5ff']}
+          style={styles.animationContainer}>
         <LottieView
           source={require('../assets/animation/splash-animation.json')}
           autoPlay
           loop
           style={styles.animation}
         />
-      </View>
-      <CustomText variant="bold" style={styles.title}>
+      </LinearGradient>
+      <CustomText variant="extraBoldItalic" style={styles.title}>
         Fortress
       </CustomText>
       <CustomText variant="extraLight" style={styles.footerText}>
@@ -50,8 +52,8 @@ const styles = StyleSheet.create({
   animationContainer: {
     backgroundColor: '#fff',
     borderRadius: 200,
-    width: 200,
-    height: 200,
+    width: 180,
+    height: 180,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     height: height * 0.2,
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     color: '#fff',
   },
   footerText: {
