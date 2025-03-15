@@ -1,18 +1,36 @@
 import React from 'react';
-import {View, Text, TextInput, Button, StyleSheet, TouchableOpacity} from 'react-native';
-import {CustomButton} from "../components";
-import {useNavigation} from "@react-navigation/native";
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { useNavigation } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import LinearGradient from 'react-native-linear-gradient';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+
+import { CustomButton } from '../components';
+import Input from '../components/Input.tsx';
+import CustomText from '../components/CustomText.tsx';
+
+const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Email is required'),
+    password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+});
 
 export default function SignIn() {
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
     const navigation = useNavigation<any>();
+const [loading, setLoading] = React.useState(false);
 
-    const signIn = async () => {
+    const { control, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+        resolver: yupResolver(validationSchema),
+    });
+
+    const signIn = async (data: { email: string; password: string }) => {
         try {
-            await auth().signInWithEmailAndPassword(email, password);
+            setLoading(true);
+            await auth().signInWithEmailAndPassword(data.email, data.password);
+            setLoading(false);
+            navigation.navigate('SignUp');
             console.log('User signed in successfully');
         } catch (error) {
             console.error('Error signing in:', error);
@@ -22,29 +40,60 @@ export default function SignIn() {
     return (
         <LinearGradient
             colors={['#000', '#151c36', '#000']}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-            style={styles.container}>
-            <Text style={styles.title}>Sign In</Text>
-            <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                placeholder="Email"
-                keyboardType="email-address"
-                placeholderTextColor="#888"
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.container}
+        >
+            <CustomText variant="medium" style={styles.title}>Sign In</CustomText>
+
+            {/* Email Input */}
+            <Controller
+                control={control}
+                name="email"
+                defaultValue=""
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                        iconName={faEnvelope}
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        placeholder="Email"
+                        keyboardType="email-address"
+                        placeholderTextColor="#888"
+                    />
+                )}
             />
-            <TextInput
-                style={styles.input}
-                value={password}
-                onChangeText={setPassword}
-                placeholder="Password"
-                secureTextEntry
-                placeholderTextColor="#888"
+            {errors.email && <CustomText style={styles.errorText}>{errors.email.message}</CustomText>}
+
+            {/* Password Input */}
+            <Controller
+                control={control}
+                name="password"
+                defaultValue=""
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                        iconName={faLock}
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        placeholder="Password"
+                        secureTextEntry
+                        placeholderTextColor="#888"
+                    />
+                )}
             />
-            <CustomButton onPress={signIn} btnText="Sign In" />
+            {errors.password && <CustomText style={styles.errorText}>{errors.password.message}</CustomText>}
+
+            {/* Sign In Button */}
+            <CustomButton
+                onPress={handleSubmit(signIn)}
+                btnText={isSubmitting ? 'Signing In...' : 'Sign In'}
+                loading={loading}
+            />
+
+            {/* Navigate to Sign Up */}
             <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                <Text style={styles.signupText}>Don't have an account? Sign Up</Text>
+                <CustomText style={styles.signupText}>Don't have an account? Sign Up</CustomText>
             </TouchableOpacity>
         </LinearGradient>
     );
@@ -60,20 +109,14 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 30,
-        fontWeight: 'bold',
         color: '#fff',
         marginBottom: 20,
     },
-    input: {
-        width: '100%',
-        height: 50,
-        backgroundColor: '#1e1e1e',
-        borderRadius: 8,
-        paddingHorizontal: 15,
-        color: '#fff',
-        marginBottom: 15,
-        borderWidth: 1,
-        borderColor: '#333',
+    errorText: {
+        color: '#ff4d4d',
+        fontSize: 14,
+        alignSelf: 'flex-start',
+        marginBottom: 10,
     },
     signupText: {
         marginTop: 15,
