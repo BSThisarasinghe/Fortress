@@ -1,60 +1,136 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   FlatList,
-  Image,
-  TouchableOpacity,
   StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  Image,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {
+  faEye,
+  faEyeSlash,
+  faLock,
+  faStar,
+} from '@fortawesome/free-solid-svg-icons';
 
-const animals = [
-  {
-    id: '1',
-    name: 'Buddy',
-    description: 'Friendly dog',
-    image: 'https://files.oaiusercontent.com/file-QAdBi2iHkvaWuvLLcyYV4T',
-  },
-  {
-    id: '2',
-    name: 'Whiskers',
-    description: 'Playful cat',
-    image: 'https://files.oaiusercontent.com/file-QAdBi2iHkvaWuvLLcyYV4T',
-  },
+const { width } = Dimensions.get('window');
+
+const passwords = [
+  { id: '1', name: 'Google', masked: true, strength: 5 },
+  { id: '2', name: 'Facebook', masked: true, strength: 4 },
+  { id: '3', name: 'Github', masked: true, strength: 3 },
+  { id: '4', name: 'Twitter', masked: true, strength: 4 },
+  { id: '5', name: 'Instagram', masked: true, strength: 5 },
 ];
 
-export default function Home({navigation}: any) {
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={animals}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Detail', {item})}>
-            <View style={styles.card}>
-              <Image source={{uri: item.image}} style={styles.image} />
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.description}>{item.description}</Text>
-            </View>
+export default function Home() {
+  const [data, setData] = useState(passwords);
+
+  const toggleMask = (id: string) => {
+    setData(prevData =>
+        prevData.map(item =>
+            item.id === id ? { ...item, masked: !item.masked } : item
+        )
+    );
+  };
+
+  const renderItem = ({ item }: { item: typeof passwords[0] }) => (
+      <LinearGradient
+          colors={['#2e2e2e', '#151c36']}
+          style={styles.passwordContainer}>
+        <View style={styles.passwordLeft}>
+          <FontAwesomeIcon icon={faLock} size={20} color="#fff" />
+          <Text style={styles.passwordText}>{item.name}</Text>
+        </View>
+        <View style={styles.passwordRight}>
+          {[...Array(item.strength)].map((_, index) => (
+              <FontAwesomeIcon key={index} icon={faStar} size={12} color="#FFD700" />
+          ))}
+          <TouchableOpacity onPress={() => toggleMask(item.id)}>
+            <FontAwesomeIcon
+                icon={item.masked ? faEyeSlash : faEye}
+                size={20}
+                color="#fff"
+            />
           </TouchableOpacity>
-        )}
-      />
-    </View>
+        </View>
+      </LinearGradient>
+  );
+
+  return (
+      <LinearGradient colors={['#000', '#151c36']} style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.countText}>Passwords</Text>
+          <Text style={styles.countNumber}>{data.length}</Text>
+        </View>
+
+        {/* Lock Icon */}
+        <View style={styles.lockIconContainer}>
+          <Image source={require('../assets/images/lock.png')} style={{ width: 100, height: 100 }} />
+        </View>
+
+        {/* Password List */}
+        <FlatList
+            data={data}
+            keyExtractor={item => item.id}
+            renderItem={renderItem}
+            contentContainerStyle={styles.listContainer}
+        />
+      </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {flex: 1, padding: 10},
-  card: {
-    marginBottom: 15,
-    backgroundColor: '#FFF',
-    borderRadius: 8,
-    padding: 10,
-    shadowColor: '#000',
-    elevation: 2,
+  container: {
+    flex: 1,
+    paddingTop: 50,
+    backgroundColor: '#000',
   },
-  image: {width: '100%', height: 150, borderRadius: 8},
-  name: {fontSize: 18, fontWeight: 'bold', marginTop: 10},
-  description: {fontSize: 14, color: '#666'},
+  header: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  countText: {
+    fontSize: 18,
+    color: '#fff',
+  },
+  countNumber: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  lockIconContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  listContainer: {
+    paddingHorizontal: 20,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  passwordLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  passwordText: {
+    fontSize: 16,
+    color: '#fff',
+    marginLeft: 10,
+  },
+  passwordRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
 });

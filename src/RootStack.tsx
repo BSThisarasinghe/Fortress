@@ -10,6 +10,7 @@ import {faAdd, faGear, faHome} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import Settings from './screens/Settings.tsx';
 import AddCredentials from './screens/AddCredentials.tsx';
+import {Header} from './components';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -34,7 +35,13 @@ function HomeTabs() {
         tabBarActiveTintColor: '#007bff', // Active tab color
         tabBarInactiveTintColor: 'gray', // Inactive tab color
       })}>
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          header: () => <Header title={'Home'} onProfilePress={() => {}} />,
+        }}
+      />
       <Tab.Screen name="AddCredentials" component={AddCredentials} />
       <Tab.Screen name="Settings" component={Settings} />
     </Tab.Navigator>
