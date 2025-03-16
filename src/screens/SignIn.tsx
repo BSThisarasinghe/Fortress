@@ -60,6 +60,7 @@ export default function SignIn() {
         iconName={faEnvelope}
         placeholder="Email"
         keyboardType="email-address"
+        style={styles.inputStyle}
       />
 
       {/* Password Input */}
@@ -69,6 +70,7 @@ export default function SignIn() {
         iconName={faLock}
         placeholder="Password"
         secureTextEntry
+        style={styles.inputStyle}
       />
 
       {/* Sign In Button */}
@@ -105,5 +107,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
     color: '#007bff',
     fontSize: 14,
+  },
+  inputStyle: {
+    marginBottom: 25,
   },
 });
