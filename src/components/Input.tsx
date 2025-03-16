@@ -38,7 +38,7 @@ const Input: React.FC<CustomTextInputProps> = ({
               <FontAwesomeIcon icon={iconName} size={size || 20} color="#999" />
             )}
             <TextInput
-              style={[styles.input, inputStyle, Fonts['light']]}
+              style={[styles.input, inputStyle, Fonts.light]}
               placeholder={placeholder}
               value={value}
               onChangeText={onChange}
@@ -49,9 +49,11 @@ const Input: React.FC<CustomTextInputProps> = ({
               {...rest}
             />
           </View>
-          {error && (
-            <CustomText style={styles.errorText}>{error.message}</CustomText>
-          )}
+          <View style={styles.errorWrapper}>
+            {error && (
+              <CustomText style={styles.errorText}>{error.message}</CustomText>
+            )}
+          </View>
         </>
       )}
     />
@@ -83,6 +85,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     alignSelf: 'flex-start',
     marginBottom: 10,
+  },
+  errorWrapper: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    height: 30,
+    marginBottom: 10,
+    width: '100%',
   },
 });
 
