@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import LinearGradient from 'react-native-linear-gradient';
-import {faEnvelope, faLock} from '@fortawesome/free-solid-svg-icons';
+import {faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import {CustomButton} from '../components';
 import Input from '../components/Input.tsx';

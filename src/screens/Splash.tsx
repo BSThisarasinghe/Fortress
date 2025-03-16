@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import CustomText from '../components/CustomText.tsx';
@@ -12,7 +12,7 @@ export default function Splash() {
 
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate("SignIn");
+      navigation.navigate("Home");
     }, 4000);
   }, []);
 
