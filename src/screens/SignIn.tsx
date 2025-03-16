@@ -36,9 +36,10 @@ export default function SignIn() {
       setLoading(true);
       await auth().signInWithEmailAndPassword(data.email, data.password);
       setLoading(false);
-      navigation.navigate('SignUp');
+      navigation.navigate('Home');
       console.log('User signed in successfully');
     } catch (error) {
+      setLoading(false);
       console.error('Error signing in:', error);
     }
   };

@@ -49,7 +49,7 @@ export default function SignUp() {
       await userCredential.user.updateProfile({displayName: data.name});
       console.log('User signed up:', userCredential.user);
       setLoading(false);
-      navigation.navigate('SignIn');
+      navigation.navigate('Home');
     } catch (error) {
       setLoading(false);
       console.error('Error signing up:', error);
